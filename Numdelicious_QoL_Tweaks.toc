@@ -1,0 +1,33 @@
+## Interface: @toc-version-retail@,@toc-version-midnight@,120000
+## Title: Numdelicious QoL Tweaks
+## Notes: Random QoL tweaks and fixes
+## Author: Numy
+## Version: @project-version@
+## SavedVariables: NumyQT_DB
+## X-Curse-Project-ID: 1392277
+## X-Wago-ID: qKQxm86x
+## IconTexture: Interface\Addons\Numdelicious_QoL_Tweaks\media\icon
+## OptionalDeps: AngryAssignments
+
+## Category: Other
+## Category-deDE: Anderes
+## Category-esES: Otros
+## Category-esMX: Otros
+## Category-frFR: Autre
+## Category-itIT: Altro
+## Category-koKR: 기타
+## Category-ptBR: Outro
+## Category-ruRU: Другое
+## Category-zhCN: 其它
+## Category-zhTW: 其他
+
+libs/embeds.xml
+locale\locale.xml
+
+core.lua
+config.xml
+
+modules\AngryAssignmentsBroker.lua
+modules\GearLinkExpander.lua
+modules\KeywordSound.lua
+modules\MiscTweaks.lua
