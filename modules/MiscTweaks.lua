@@ -7,6 +7,7 @@ local L = NQT.L;
 
 local isMidnight = select(4, GetBuildInfo()) >= 120000;
 local issecretvalue = issecretvalue or function(val) return false; end;
+local StripHyperlinks = C_StringUtil and C_StringUtil.StripHyperlinks or StripHyperlinks;
 local ChatFrame_AddMessageEventFilter = ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter or ChatFrame_AddMessageEventFilter;
 local ChatFrame_RemoveMessageEventFilter = ChatFrameUtil and ChatFrameUtil.RemoveMessageEventFilter or ChatFrame_RemoveMessageEventFilter;
 
