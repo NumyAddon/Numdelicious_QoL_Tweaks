@@ -26,7 +26,7 @@ function Module:OnInitialize()
     for dbKey, tweak in pairs(self.tweaks) do
         tweak.enabled = self.db[dbKey] ~= false;
         if tweak.init then
-            tweak:init(tweak.enabled, self.db._tweakDB[dbKey]);
+            securecallfunction(tweak.init, tweak, tweak.enabled, self.db._tweakDB[dbKey]);
         end
     end
 end
@@ -35,7 +35,7 @@ function Module:OnEnable()
     for dbKey, tweak in pairs(self.tweaks) do
         tweak.enabled = self.db[dbKey] ~= false;
         if tweak.enable and tweak.enabled then
-            tweak:enable();
+            securecallfunction(tweak.enable, tweak);
         end
     end
 end
@@ -44,7 +44,7 @@ function Module:OnDisable()
     for _, tweak in pairs(self.tweaks) do
         tweak.enabled = false;
         if tweak.disable then
-            tweak:disable();
+            securecallfunction(tweak.disable, tweak);
         end
     end
 end
@@ -217,12 +217,18 @@ tweaks.scrollWheelDropdowns = {
         end
 
         EventUtil.ContinueOnAddOnLoaded('Blizzard_GroupFinder', function()
-            self.dropdowns[LFDQueueFrameTypeDropdown] = true;
-            self.dropdowns[RaidFinderQueueFrameSelectionDropdown] = true;
+            if LFDQueueFrameTypeDropdown then
+                self.dropdowns[LFDQueueFrameTypeDropdown] = true;
+            end
+            if RaidFinderQueueFrameSelectionDropdown then
+                self.dropdowns[RaidFinderQueueFrameSelectionDropdown] = true;
+            end
             self.handleDropdowns();
         end);
         EventUtil.ContinueOnAddOnLoaded('Blizzard_DelvesDifficultyPicker', function()
-            self.dropdowns[DelvesDifficultyPickerFrame.Dropdown] = true;
+            if DelvesDifficultyPickerFrame and DelvesDifficultyPickerFrame.Dropdown then
+                self.dropdowns[DelvesDifficultyPickerFrame.Dropdown] = true;
+            end
             self.handleDropdowns();
         end);
     end,
