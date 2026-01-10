@@ -13,3 +13,10 @@
 --- @field disable nil|fun(self: NQT_MiscTweaks_Tweak)
 --- @field order number # order of the settings list
 --- @field enabled boolean? # automatically set OnInit and when toggled
+
+--- @class NQT_WishIcons_IconDBTable
+--- @field enabled boolean
+--- @field locked boolean
+--- @field position { anchor: FramePoint, xOffset: number, yOffset: number }
+--- @field scale number
+--- @field alpha number

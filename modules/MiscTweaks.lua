@@ -413,7 +413,7 @@ tweaks.breakUpLargeNumbersInTooltips = {
             return text;
         end
         TooltipDataProcessor.AddLinePreCall(TooltipDataProcessor.AllTypes, function(_, info)
-            if not self.enabled then return; end
+            if not self.enabled or issecretvalue(info) then return; end
             if info.leftText and not issecretvalue(info.leftText) and info.leftText:match(format) then
                 info.leftText = breakUpText(info.leftText);
             end
@@ -493,41 +493,6 @@ tweaks.classNameItemTooltips = {
                 end
             end
         end)
-    end,
-};
--- @todo: check midnight compatibility
-tweaks.courtOfStarsItemTooltips = {
-    order = increment(),
-    label = L["Court of Stars item tooltips"],
-    description = L["Adds information about Court of Stars items to their tooltips."],
-    init = function(self)
-        local map = {
-            [105117] = "Alchemist, Rogue [kills Gerdo]", -- Flask of the Solemn Night
-            [105157] = "Engineer, Goblin, Gnome [disable Constructs]", -- Arcane Power Conduit
-            [106110] = "Shaman, Skinner, Scribe [move speed]", -- Waterlogged Scroll
-            [105160] = "Demon Hunter, Warlock, Priest, Paladin [crit bonus]", -- Fel Orb
-            [105340] = "Druid, Herbalist [haste bonus]", -- Umbral Bloom
-            [106018] = "Rogue, Warrior, Leatherworker [pulls Emissary]", -- Bazaar Goods
-            [106112] = "Healers, Tailors [pulls Emissary]", -- Wounded Nightborne Civilian
-            [106113] = "Jewelcrafter, Miner [pulls Emissary]", -- Lifesized Nightborne Statue
-            [105831] = "Paladin, Priest, Demon Hunter [damage reduction]", -- Infernal Tome
-            [105249] = "Cooking, Pandaren, Herbalist [health bonus]", -- Nightshade Refreshments
-            [105215] = "Hunter, Blacksmith [kills Emissary]", -- Discarded Junk
-            [106024] = "Mage, Enchanter, Elf [damage bonus]", -- Magical Lantern
-            [106108] = "Death Knight, Monk [regen bonus]", -- Starlight Rose Brew
-        };
-        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip)
-            if not self.enabled or not tooltip.GetUnit then return; end
-
-            local _, unit = tooltip:GetUnit();
-            if not unit then return; end
-            local guid = UnitGUID(unit);
-            if issecretvalue and issecretvalue(guid) then return; end
-            local npcid = string.sub(guid, -17, -12);
-            if not npcid or not map[tonumber(npcid)] then return; end
-            local text = map[tonumber(npcid)];
-            tooltip:AddLine('CoS: |cffffffff' .. text .. '|r');
-        end);
     end,
 };
 tweaks.hideTimePlayedUnlessManuallyRequested = {
@@ -620,88 +585,6 @@ tweaks.hideOutgoingDBMAutoReply = {
         ChatFrame_RemoveMessageEventFilter("CHAT_MSG_WHISPER_INFORM", self.filter);
         ChatFrame_RemoveMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", self.filter);
         ChatFrame_RemoveMessageEventFilter("CHAT_MSG_COMMUNITIES_CHANNEL", self.filter);
-    end,
-};
-tweaks.muteElitismHelper = {
-    order = increment(),
-    defaultEnabled = false,
-    label = L["Mute Elitism Helper messages"],
-    description = L["Hides Elitism Helper messages in party chat."],
-    --- @param self NQT_Misc_MuteElitismHelper
-    init = function(self)
-        --- @class NQT_Misc_MuteElitismHelper: NQT_MiscTweaks_Tweak
-        self = self;
-        -- example:
-        -- <EH> Player-Realm got hit by [x] for 36.9k (52%).
-        self.filter = function(_, _, msg, _, _)
-            if (string.sub(msg, 1, 4) == '<EH>') then
-                return true;
-            end
-        end;
-    end,
-    --- @param self NQT_Misc_MuteElitismHelper
-    enable = function(self)
-        ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", self.filter);
-        ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", self.filter);
-        ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.filter)
-    end,
-    --- @param self NQT_Misc_MuteElitismHelper
-    disable = function(self)
-        ChatFrame_RemoveMessageEventFilter("CHAT_MSG_PARTY", self.filter);
-        ChatFrame_RemoveMessageEventFilter("CHAT_MSG_PARTY_LEADER", self.filter);
-        ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SAY", self.filter)
-    end,
-};
-tweaks.additionalEtraceInfo = {
-    order = increment(),
-    label = L["Improve /etrace"],
-    description = L["Adds extra info to Combat Log and Unit Aura events in /etrace."],
-    shownPredicate = function() return not isMidnight; end,
-    --- @param self NQT_Misc_AdditionalEtraceInfo
-    init = function(self)
-        --- @class NQT_Misc_AdditionalEtraceInfo: NQT_MiscTweaks_Tweak
-        self = self;
-        if not self:shownPredicate() then return; end
-        --- @param EventTrace EventTrace
-        self.logEvent = function(EventTrace, event, ...)
-            if event == "COMBAT_LOG_EVENT_UNFILTERED" or event == "COMBAT_LOG_EVENT" then
-                self.originalLogEvent(EventTrace, event, CombatLogGetCurrentEventInfo());
-            elseif event == "COMBAT_TEXT_UPDATE" then
-                self.originalLogEvent(EventTrace, event, (...), GetCurrentCombatTextEventInfo());
-            elseif event == "UNIT_AURA" then
-                local _, auras = ...;
-                local info = {};
-                for _, aura in pairs(auras.addedAuras or {}) do
-                    table.insert(info, aura.name);
-                    table.insert(info, aura.duration);
-                    table.insert(info, aura.spellId);
-                    table.insert(info, '---');
-                end
-                self.originalLogEvent(EventTrace, event, ..., #info, unpack(info));
-            else
-                self.originalLogEvent(EventTrace, event, ...);
-            end
-        end;
-    end,
-    --- @param self NQT_Misc_AdditionalEtraceInfo
-    enable = function(self)
-        --- @class NQT_Misc_AdditionalEtraceInfo: NQT_MiscTweaks_Tweak
-        self = self;
-        if not self:shownPredicate() then return; end
-        EventUtil.ContinueOnAddOnLoaded("Blizzard_EventTrace", function()
-            if not self.enabled then return; end
-            if not self.originalLogEvent then
-                self.originalLogEvent = EventTrace.LogEvent;
-            end
-            EventTrace.LogEvent = self.logEvent;
-        end);
-    end,
-    --- @param self NQT_Misc_AdditionalEtraceInfo
-    disable = function(self)
-        if not self:shownPredicate() then return; end
-        if EventTrace and self.originalLogEvent then
-            EventTrace.LogEvent = self.originalLogEvent;
-        end
     end,
 };
 tweaks.removeCallingNotificationFromMinimap = {

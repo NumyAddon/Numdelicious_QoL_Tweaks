@@ -36,6 +36,7 @@ function Main:OnInitialize()
     Config:Init("Numdelicious QoL Tweaks", self.db, nil, ns.L, self, {
         'GearLinkExpander',
         'KeywordSound',
+        'WishIcons',
         'MiscTweaks',
         'AngryAssignmentsBroker',
     });

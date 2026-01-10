@@ -34,3 +34,4 @@ modules\AngryAssignmentsBroker.lua
 modules\GearLinkExpander.lua
 modules\KeywordSound.lua
 modules\MiscTweaks.lua
+modules\WishIcons.lua
