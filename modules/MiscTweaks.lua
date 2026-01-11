@@ -1,6 +1,6 @@
 local addonName = ...
 --- @class NQT_NS
-local ns = select(2, ...);
+local NQT = select(2, ...);
 
 local Main = NQT.Main;
 local L = NQT.L;
