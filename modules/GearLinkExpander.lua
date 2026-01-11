@@ -10,8 +10,8 @@ local ChatFrame_RemoveMessageEventFilter = ChatFrameUtil and ChatFrameUtil.Remov
 local RELIC_TOOLTIP_TYPE_PATTERN = RELIC_TOOLTIP_TYPE:format('(.+)')
 local ITEM_LEVEL_PATTERN = ITEM_LEVEL:gsub('%%d', '(%%d+)')
 
---- @class NQT_GearLinkExpander: NumyConfig_Module, AceHook-3.0
-local Module = Main:NewModule('GearLinkExpander', 'AceHook-3.0');
+--- @class NQT_GearLinkExpander: NumyConfig_Module
+local Module = Main:NewModule('GearLinkExpander');
 
 function Module:GetName()
     return L["Gear Link Expander"];

@@ -38,6 +38,7 @@ function Main:OnInitialize()
         'KeywordSound',
         'WishIcons',
         'MiscTweaks',
+        'ProfessionButtonTab',
         'AngryAssignmentsBroker',
     });
 

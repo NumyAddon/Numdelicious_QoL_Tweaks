@@ -10,8 +10,8 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local playerName = UnitNameUnmodified('player');
 local DEFAULT_LSM_SOUND = "NQT Alert";
 
---- @class NQT_KeywordSound: NumyConfig_Module, AceHook-3.0
-local Module = Main:NewModule('KeywordSound', 'AceHook-3.0');
+--- @class NQT_KeywordSound: NumyConfig_Module
+local Module = Main:NewModule('KeywordSound');
 
 function Module:GetName()
     return L["Keyword Sounds"];

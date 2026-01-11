@@ -10,8 +10,8 @@ local StripHyperlinks = C_StringUtil and C_StringUtil.StripHyperlinks or StripHy
 local ChatFrame_AddMessageEventFilter = ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter or ChatFrame_AddMessageEventFilter;
 local ChatFrame_RemoveMessageEventFilter = ChatFrameUtil and ChatFrameUtil.RemoveMessageEventFilter or ChatFrame_RemoveMessageEventFilter;
 
---- @class NQT_MiscTweaks: NumyConfig_Module, AceHook-3.0
-local Module = Main:NewModule('MiscTweaks', 'AceHook-3.0');
+--- @class NQT_MiscTweaks: NumyConfig_Module
+local Module = Main:NewModule('MiscTweaks');
 
 function Module:GetName()
     return L["Misc Tweaks"];

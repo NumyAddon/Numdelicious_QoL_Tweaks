@@ -4,8 +4,8 @@ local NQT = select(2, ...);
 local Main = NQT.Main;
 local L = NQT.L;
 
---- @class NQT_WishIcons: NumyConfig_Module, AceHook-3.0
-local Module = Main:NewModule('WishIcons', 'AceHook-3.0');
+--- @class NQT_WishIcons: NumyConfig_Module
+local Module = Main:NewModule('WishIcons');
 
 Module.Container = CreateFrame("Frame", nil, UIParent);
 
