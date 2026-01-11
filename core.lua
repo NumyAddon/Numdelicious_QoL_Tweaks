@@ -4,7 +4,7 @@ local ns = select(2, ...);
 
 --@debug@
 _G.Numdelicious_QoL_Tweaks = ns;
-if not _G.NQT then _G.NQT = ns; end
+if not _G.NumQT then _G.NumQT = ns; end
 --@end-debug@
 
 --- @class NQT_Main: AceAddon, AceConsole-3.0, AceHook-3.0, AceEvent-3.0
