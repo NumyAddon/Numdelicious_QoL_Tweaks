@@ -8,7 +8,7 @@
 ## Version: @project-version@
 ## SavedVariables: NumyQT_DB
 ## X-Curse-Project-ID: 1392277
-## X-Wago-ID: qKQxm86x
+## X-Wago-ID: mNw74zNo
 ## IconTexture: Interface\Addons\Numdelicious_QoL_Tweaks\media\icon
 ## OptionalDeps: AngryAssignments
 
