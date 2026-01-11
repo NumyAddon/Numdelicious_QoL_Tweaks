@@ -33,7 +33,7 @@ function Main:OnInitialize()
     --- @type NumyConfig
     local Config = ns.Config;
 
-    Config:Init("Numdelicious QoL Tweaks", self.db, nil, ns.L, self, {
+    Config:Init("Numdelicious QoL Tweaks", "Numdelicious_QoL_Tweaks", self.db, nil, ns.L, self, {
         'GearLinkExpander',
         'KeywordSound',
         'WishIcons',
