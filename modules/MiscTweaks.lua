@@ -5,7 +5,6 @@ local ns = select(2, ...);
 local Main = NQT.Main;
 local L = NQT.L;
 
-local isMidnight = select(4, GetBuildInfo()) >= 120000;
 local issecretvalue = issecretvalue or function(val) return false; end;
 local StripHyperlinks = C_StringUtil and C_StringUtil.StripHyperlinks or StripHyperlinks;
 local ChatFrame_AddMessageEventFilter = ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter or ChatFrame_AddMessageEventFilter;
@@ -632,5 +631,20 @@ tweaks.ignoreWebTicket = {
     --- @param self NQT_Misc_IgnoreWebTicket
     disable = function(self)
         self.frame:UnregisterEvent("UPDATE_WEB_TICKET");
+    end,
+};
+tweaks.reloadOnTaintPopup = {
+    order = increment(),
+    label = L["Allow reloading without disabling addons when there's a taint popup"],
+    description = L["A third Reload UI button will show on the taint popup"],
+    enable = function()
+        local popup = StaticPopupDialogs["ADDON_ACTION_FORBIDDEN"];
+        popup.button3 = RELOADUI;
+        popup.OnAlt = function() C_UI.Reload(); end;
+    end,
+    disable = function()
+        local popup = StaticPopupDialogs["ADDON_ACTION_FORBIDDEN"];
+        popup.button3 = nil;
+        popup.OnAlt = nil;
     end,
 };
