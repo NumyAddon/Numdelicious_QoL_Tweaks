@@ -10,8 +10,8 @@ local StripHyperlinks = C_StringUtil and C_StringUtil.StripHyperlinks or StripHy
 local ChatFrame_AddMessageEventFilter = ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter or ChatFrame_AddMessageEventFilter;
 local ChatFrame_RemoveMessageEventFilter = ChatFrameUtil and ChatFrameUtil.RemoveMessageEventFilter or ChatFrame_RemoveMessageEventFilter;
 
---- @class NQT_MiscTweaks: NumyConfig_Module
-local Module = Main:NewModule('MiscTweaks');
+--- @class NQT_MiscTweaks: NumyConfig_Module, AceHook-3.0
+local Module = Main:NewModule('MiscTweaks', 'AceHook-3.0');
 
 function Module:GetName()
     return L["Misc Tweaks"];
@@ -183,9 +183,7 @@ tweaks.adjustNameplateWidgetScale = {
                         end
                     end);
                 end
-                if not plate.UnitFrame.WidgetContainer:IsMouseWheelEnabled() then
-                    plate.UnitFrame.WidgetContainer:EnableMouseWheel(true);
-                end
+                plate.UnitFrame.WidgetContainer:EnableMouseWheel(true);
             end
         end);
     end,
@@ -211,6 +209,25 @@ tweaks.scrollWheelDropdowns = {
             for dropdown in pairs(self.dropdowns) do
                 if dropdown and dropdown.Decrement then
                     dropdown:EnableMouseWheel(self.enabled);
+                    if self.enabled and not Module:IsHooked(dropdown, 'OnEnter') then
+                        Module:SecureHookScript(dropdown, 'OnEnter', function(dd)
+                            if not self.enabled then return; end
+                            if not GameTooltip:IsOwned(dd) then
+                                GameTooltip:SetOwner(dd, "ANCHOR_RIGHT");
+                            end
+                            GameTooltip_AddInstructionLine(GameTooltip, L["NQT: Use mouse wheel to select next or previous selection."], true);
+                            GameTooltip:Show();
+                        end);
+                        Module:SecureHookScript(dropdown, 'OnLeave', function(dd)
+                            if not self.enabled then return; end
+                            if GameTooltip:IsOwned(dd) then
+                                GameTooltip:Hide();
+                            end
+                        end);
+                    elseif not self.enabled and Module:IsHooked(dropdown, 'OnEnter') then
+                        Module:Unhook(dropdown, 'OnEnter');
+                        Module:Unhook(dropdown, 'OnLeave');
+                    end
                 end
             end
         end
