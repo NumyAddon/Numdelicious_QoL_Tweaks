@@ -8,7 +8,6 @@ local ChatFrame_AddMessageEventFilter = ChatFrameUtil and ChatFrameUtil.AddMessa
 local ChatFrame_RemoveMessageEventFilter = ChatFrameUtil and ChatFrameUtil.RemoveMessageEventFilter or ChatFrame_RemoveMessageEventFilter
 
 local RELIC_TOOLTIP_TYPE_PATTERN = RELIC_TOOLTIP_TYPE:format('(.+)')
-local ITEM_LEVEL_PATTERN = ITEM_LEVEL:gsub('%%d', '(%%d+)')
 
 --- @class NQT_GearLinkExpander: NumyConfig_Module
 local Module = Main:NewModule('GearLinkExpander');
@@ -197,7 +196,7 @@ function Module:GetRealItemLevel(itemLink)
 
     for _, line in ipairs(tooltipData.lines) do
         if line.type == Enum.TooltipDataLineType.ItemLevel then
-            return tonumber(line.leftText:match(ITEM_LEVEL_PATTERN)) or 0;
+            return line.itemLevel or 0;
         end
     end
 
