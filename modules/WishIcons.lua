@@ -147,8 +147,8 @@ function Module:BuildConfig(configBuilder, db)
     configBuilder:SetDefaults(defaults, true, true);
     self.defaults = defaults;
 
-    local scaleSliderOptions = configBuilder:MakeSliderOptions(0.1, 3.0, 0.1, function(value) return string.format("%.1fx", value); end);
-    local alphaSliderOptions = configBuilder:MakeSliderOptions(0.1, 1.0, 0.05, function(value) return string.format("%d%%", value * 100); end);
+    local scaleSliderOptions = configBuilder.sliderOptions.scale;
+    local alphaSliderOptions = configBuilder.sliderOptions.percent;
     --- @param name string
     --- @param tooltip string
     --- @param dbTable NQT_WishIcons_IconDBTable
