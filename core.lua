@@ -39,6 +39,7 @@ function Main:OnInitialize()
         'WishIcons',
         'MiscTweaks',
         'ProfessionButtonTab',
+        'EncounterJournalIcons',
         'AngryAssignmentsBroker',
     });
 

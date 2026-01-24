@@ -20,3 +20,20 @@
 --- @field position { anchor: FramePoint, xOffset: number, yOffset: number }
 --- @field scale number
 --- @field alpha number
+
+--- @class NQT_EJI_ClassInfo: ClassInfo
+--- @field numSpecs number
+--- @field specs table<number, {id: number, name: string, icon: fileID, role: string}>
+
+--- @class NQT_EJI_ClassAndSpecInfo
+--- @field classID number
+--- @field className string
+--- @field classFile string
+--- @field specID number
+--- @field specName string
+--- @field specIcon fileID|true # true if merged
+--- @field specRole string|true # true if merged
+
+--- @class NQT_EJI_ItemCache: EncounterJournalItemInfo
+--- @field specs table<number, number> # [specID] = classID
+--- @field everyone boolean?

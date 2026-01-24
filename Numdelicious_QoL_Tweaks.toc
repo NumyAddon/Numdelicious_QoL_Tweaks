@@ -36,3 +36,4 @@ modules\KeywordSound.lua
 modules\MiscTweaks.lua
 modules\WishIcons.lua
 modules\ProfessionButtonTab.lua
+modules\EncounterJournalIcons.lua
