@@ -160,8 +160,8 @@ FindKeywords = function(_, event, text, author)
     for _, lowercaseWord in pairs(splits) do
         if not lowercaseWord:find("|") then
             if
-                db.triggerOnCharacterName and lowercaseWord == playerName:lower()
-                or db.keywords[playerName:lower()]
+                (db.triggerOnCharacterName and lowercaseWord == playerName:lower())
+                or db.keywords[lowercaseWord]
             then
                 PlaySoundFile(LSM:Fetch("sound", db.sound), db.master and "Master" or nil);
 
