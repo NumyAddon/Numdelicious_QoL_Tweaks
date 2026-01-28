@@ -275,7 +275,6 @@ do
                         ViewGuildRecipes(skillID);
                     else
                         local link = "trade:" .. playerGuid .. ":" .. id .. ":333";
-                        ProfessionsFrame:Hide();
                         tooltip:SetHyperlink(link);
                     end
                 else
