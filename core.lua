@@ -1,5 +1,5 @@
 local name = ...;
---- @class NQT_NS
+--- @class NQT_NS: NumyConfigNS
 local ns = select(2, ...);
 
 --@debug@
@@ -30,9 +30,7 @@ function Main:OnInitialize()
         end
     end
 
-    --- @type NumyConfig
     local Config = ns.Config;
-
     Config:Init("Numdelicious QoL Tweaks", "Numdelicious_QoL_Tweaks", self.db, nil, ns.L, self, {
         'GearLinkExpander',
         'KeywordSound',
