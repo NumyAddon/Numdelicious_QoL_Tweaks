@@ -50,6 +50,10 @@ function Module:OnInitialize()
     do
         --- @param frame NQT_WishIcons_RepairIconFrame
         local function onEvent(frame)
+            if self.db.repairReminder.restingOnly and not IsResting() then
+                frame:UpdateVisibility(false);
+                return;
+            end
             local lowest = 1;
             for i = 1, 18 do
                 local cur, max = GetInventoryItemDurability(i);
@@ -78,6 +82,8 @@ function Module:OnInitialize()
         repairFrame.Text = text;
         text:SetPoint("BOTTOMLEFT", repairFrame, "BOTTOMLEFT", 5, 3);
 
+        texture:SetShown(not self.db.repairReminder.textOnly);
+
         repairFrame:Init(
             self.defaults.repairReminder.position,
             self.db.repairReminder,
@@ -91,6 +97,9 @@ function Module:OnInitialize()
         repairFrame:RegisterEvent("PLAYER_DEAD");
         repairFrame:RegisterEvent("UPDATE_INVENTORY_DURABILITY");
         repairFrame:RegisterEvent("MERCHANT_CLOSED");
+        if self.db.repairReminder.restingOnly then
+            repairFrame:RegisterEvent("PLAYER_UPDATE_RESTING");
+        end
     end
 end
 
@@ -142,6 +151,8 @@ function Module:BuildConfig(configBuilder, db)
             },
             scale = 1.0,
             alpha = 1.0,
+            textOnly = false,
+            restingOnly = false,
         },
     };
     configBuilder:SetDefaults(defaults, true, true);
@@ -237,6 +248,31 @@ function Module:BuildConfig(configBuilder, db)
                 self.RepairReminderFrame:SetThreshold(threshold);
             end,
             defaults.repairReminder.threshold,
+            db.repairReminder
+        ):SetParentInitializer(repairInitializer);
+        configBuilder:MakeCheckbox(
+            L["Text Only"],
+            "textOnly",
+            L["Show only the durability percentage text instead of the icon."],
+            function(_, textOnly)
+                self.RepairReminderFrame.Texture:SetShown(not textOnly);
+            end,
+            defaults.repairReminder.textOnly,
+            db.repairReminder
+        ):SetParentInitializer(repairInitializer);
+        configBuilder:MakeCheckbox(
+            L["Resting Only"],
+            "restingOnly",
+            L["Show the repair reminder only while in a resting area."],
+            function(_, restingOnly)
+                if restingOnly then
+                    self.RepairReminderFrame:RegisterEvent("PLAYER_UPDATE_RESTING");
+                else
+                    self.RepairReminderFrame:UnregisterEvent("PLAYER_UPDATE_RESTING");
+                end
+                self.RepairReminderFrame:GetScript("OnEvent")(self.RepairReminderFrame, "PLAYER_UPDATE_RESTING");
+            end,
+            defaults.repairReminder.restingOnly,
             db.repairReminder
         ):SetParentInitializer(repairInitializer);
     end
