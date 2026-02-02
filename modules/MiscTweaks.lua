@@ -257,6 +257,33 @@ tweaks.scrollWheelDropdowns = {
         self.handleDropdowns();
     end,
 };
+tweaks.guildInviteBnetFriends = {
+    order = increment(),
+    label = L["Guild invite Battle.net friends"],
+    description = L["Adds a 'Invite to Guild' option to the right-click context menu for Battle.net friends."],
+    init = function(self)
+        local playerRealm = GetRealmName();
+        Menu.ModifyMenu("MENU_UNIT_BN_FRIEND", function(owner, rootDescription, context)
+            if not self.enabled then return; end
+
+            local gameAccountInfo = context and context.accountInfo and context.accountInfo.gameAccountInfo;
+            if not gameAccountInfo then return; end
+            local characterName = gameAccountInfo.characterName;
+            local realmName = gameAccountInfo.realmName;
+            if realmName and realmName ~= playerRealm and realmName ~= "" then
+                characterName = characterName .. "-" .. realmName;
+            end
+
+            for i, elementDescription in rootDescription:EnumerateElementDescriptions() do
+                if MenuUtil.GetElementText(elementDescription) == INVITE and elementDescription:IsEnabled() then
+                    rootDescription:Insert(MenuUtil.CreateButton(CHAT_GUILD_INVITE_SEND .. characterName, function()
+                        C_GuildInfo.Invite(characterName);
+                    end), i + 1);
+                end
+            end
+        end);
+    end,
+};
 tweaks.easyDelete = {
     order = increment(),
     label = L["Easy Delete"],
