@@ -4,8 +4,9 @@ local NQT = select(2, ...);
 local Main = NQT.Main;
 local L = NQT.L;
 
-local ChatFrame_AddMessageEventFilter = ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter or ChatFrame_AddMessageEventFilter
-local ChatFrame_RemoveMessageEventFilter = ChatFrameUtil and ChatFrameUtil.RemoveMessageEventFilter or ChatFrame_RemoveMessageEventFilter
+local ChatFrame_AddMessageEventFilter = ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter or ChatFrame_AddMessageEventFilter;
+local ChatFrame_RemoveMessageEventFilter = ChatFrameUtil and ChatFrameUtil.RemoveMessageEventFilter or ChatFrame_RemoveMessageEventFilter;
+local issecretvalue = issecretvalue or function(v) return false; end;
 
 local RELIC_TOOLTIP_TYPE_PATTERN = RELIC_TOOLTIP_TYPE:format('(.+)')
 
@@ -288,7 +289,7 @@ function Module:ConfigureChattynator()
         return;
     end
     Chattynator.API.AddModifier(function(data)
-        if not data.typeInfo or not self.activeEvents[data.typeInfo.event] then
+        if not data.typeInfo or not self.activeEvents[data.typeInfo.event] or issecretvalue(data.text) then
             return;
         end
         for itemLink in data.text:gmatch("|[^|]+|Hitem:.-|h.-|h|r") do
@@ -310,7 +311,7 @@ do
     end
     local predicateItemLink;
     local function predicate(message)
-        return message and message.find and message:find(predicateItemLink, 1, true);
+        return message and not issecretvalue(message) and message.find and message:find(predicateItemLink, 1, true);
     end
 
     function Module:OnAfterItemLoad(itemLink)
