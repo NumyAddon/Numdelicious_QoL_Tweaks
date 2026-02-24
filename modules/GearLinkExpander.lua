@@ -223,7 +223,7 @@ end
 --- @param message string
 --- @param onAfterLoadCallback fun(itemLink: string)
 --- @return string
-function Module:HandleItemlink(itemLink, message, onAfterLoadCallback)
+function Module:HandleItemLink(itemLink, message, onAfterLoadCallback)
     local itemName, _, quality, _, _, _, itemSubType, _, itemEquipLoc, _, _, itemClassId, itemSubClassId = C_Item.GetItemInfo(itemLink);
     if not itemName then
         Item:CreateFromItemLink(itemLink):ContinueOnItemLoad(function() onAfterLoadCallback(itemLink) end);
@@ -244,7 +244,6 @@ function Module:HandleItemlink(itemLink, message, onAfterLoadCallback)
     end
 
     local itemString = string.match(itemLink, "item[%-?%d:]+");
-    local _, _, color = string.find(itemLink, "|?c([^|]*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?");
     local iLevel = self:GetRealItemLevel(itemLink);
 
     local attrs = {};
@@ -254,6 +253,9 @@ function Module:HandleItemlink(itemLink, message, onAfterLoadCallback)
         elseif (itemClassId == Enum.ItemClass.Armor and itemEquipLoc == "INVTYPE_CLOAK") then
             -- don't display Cloth for cloaks
         else
+            if (itemClassId == Enum.ItemClass.Gem) then
+                itemSubType = AUCTION_CATEGORY_GEMS;
+            end
             if (self.db.subtype_short_format) then
                 table.insert(attrs, itemSubType:sub(0, 1));
             else
@@ -276,8 +278,8 @@ function Module:HandleItemlink(itemLink, message, onAfterLoadCallback)
     local craftedQuality = C_TradeSkillUI.GetItemCraftedQualityByItemInfo(itemLink);
     local qualityAtlas = craftedQuality and (" |A:Professions-ChatIcon-Quality-Tier" .. craftedQuality .. ":17:17::1|a") or "";
 
-    local newItemName = itemName .. qualityAtlas .. " (" .. table.concat(attrs, " ") .. ")";
-    local newLink = "|c" .. color .. "|H" .. itemString .. "|h[" .. newItemName .. "]|h|r";
+    local newItemName = ("%s%s (%s)"):format(itemName, qualityAtlas, table.concat(attrs, " "));
+    local newLink = ("|H%s|h[%s]|h"):format(itemString, newItemName);
 
     message = string.gsub(message, self:EscapeSearchString(itemLink), newLink);
 
@@ -292,15 +294,15 @@ function Module:ConfigureChattynator()
         if not data.typeInfo or not self.activeEvents[data.typeInfo.event] or issecretvalue(data.text) then
             return;
         end
-        for itemLink in data.text:gmatch("|[^|]+|Hitem:.-|h.-|h|r") do
-            data.text = self:HandleItemlink(itemLink, data.text, function() Chattynator.API.InvalidateMessage(data.id); end);
+        for itemLink in data.text:gmatch("|Hitem:.-|h.-|h") do
+            data.text = self:HandleItemLink(itemLink, data.text, function() Chattynator.API.InvalidateMessage(data.id); end);
         end
     end);
 end
 
 function Module:Filter(message, ...)
-    for itemLink in message:gmatch("|[^|]+|Hitem:.-|h.-|h|r") do
-        message = self:HandleItemlink(itemLink, message, function() self:OnAfterItemLoad(itemLink) end);
+    for itemLink in message:gmatch("|Hitem:.-|h.-|h") do
+        message = self:HandleItemLink(itemLink, message, function() self:OnAfterItemLoad(itemLink) end);
     end
     return false, message, ...;
 end
