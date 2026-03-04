@@ -360,59 +360,63 @@ tweaks.copyChat = {
         end
     end,
 };
-tweaks.chatCursor = {
-    order = increment(),
-    label = L["Constant chat cursor"],
-    description = L["Shows a constant red cursor line in chat edit boxes while typing."],
-    --- @param self NQT_Misc_ChatCursor
-    init = function(self, enabled)
-        --- @class NQT_Misc_ChatCursor: NQT_MiscTweaks_Tweak
-        self = self;
-        self.editBoxLines = {};
-        self.replaceCursor = function(editBox)
-            if not editBox or self.editBoxLines[editBox] then return end
-            local line = editBox:CreateLine();
-            self.editBoxLines[editBox] = line;
-            line:SetColorTexture(1, 0, 0);
-            line:SetThickness(2);
-            line:Hide();
-
-            local relativeTo;
-            for _, region in ipairs({ editBox:GetRegions(), }) do
-                if region.GetObjectType and region:GetObjectType() == 'FontString' then
-                    relativeTo = region;
-                    break;
-                end
-            end
-
-            editBox:SetBlinkSpeed(0);
-            editBox:HookScript('OnCursorChanged', function(_, posX, posY, _, lineHeight)
-                if not self.enabled then return; end
-                line:SetStartPoint('TOPLEFT', relativeTo, posX, posY - 2);
-                line:SetEndPoint('TOPLEFT', relativeTo, posX, posY - 2 - lineHeight);
-                line:Show();
-            end);
-            editBox:HookScript('OnEditFocusLost', function()
-                line:Hide();
-            end);
-        end;
-    end,
-    --- @param self NQT_Misc_ChatCursor
-    enable = function(self)
-        self.replaceCursor(ChatFrame1EditBox);
-        EventUtil.ContinueOnAddOnLoaded('WowLua', function()
-            RunNextFrame(function()
-                self.replaceCursor(WowLuaFrameEditBox);
-            end);
-        end);
-    end,
-    --- @param self NQT_Misc_ChatCursor
-    disable = function(self)
-        for _, line in pairs(self.editBoxLines) do
-            line:Hide();
-        end
-    end,
-};
+-- disabled so long as the default UI cursor is working properly
+--[[tweaks.chatCursor = {
+--    order = increment(),
+--    label = L["Constant chat cursor"],
+--    description = L["Shows a constant red cursor line in chat edit boxes while typing."],
+--    --- @param self NQT_Misc_ChatCursor
+--    init = function(self)
+--        --- @class NQT_Misc_ChatCursor: NQT_MiscTweaks_Tweak
+--        self = self;
+--        self.editBoxLines = {};
+--        --- @param editBox EditBox
+--        self.replaceCursor = function(editBox)
+--            if not editBox or self.editBoxLines[editBox] then return end
+--            local line = editBox:CreateLine();
+--            self.editBoxLines[editBox] = line;
+--            line:SetColorTexture(1, 0, 0);
+--            line:SetThickness(2);
+--            line:Hide();
+--
+--            local relativeTo;
+--            for _, region in ipairs({ editBox:GetRegions() }) do
+--                if region.GetObjectType and region:GetObjectType() == 'FontString' then
+--                    relativeTo = region;
+--                    break;
+--                end
+--            end
+--
+--            line.editBoxBlinkSpeed = editBox:GetBlinkSpeed();
+--            editBox:SetBlinkSpeed(0);
+--            editBox:HookScript('OnCursorChanged', function(_, posX, posY, _, lineHeight)
+--                if not self.enabled then return; end
+--                line:SetStartPoint('TOPLEFT', relativeTo, posX, posY - 8);
+--                line:SetEndPoint('TOPLEFT', relativeTo, posX, posY - 8 - lineHeight);
+--                line:Show();
+--            end);
+--            editBox:HookScript('OnEditFocusLost', function()
+--                line:Hide();
+--            end);
+--        end;
+--    end,
+--    --- @param self NQT_Misc_ChatCursor
+--    enable = function(self)
+--        self.replaceCursor(ChatFrame1EditBox);
+--        EventUtil.ContinueOnAddOnLoaded('WowLua', function()
+--            RunNextFrame(function()
+--                self.replaceCursor(WowLuaFrameEditBox);
+--            end);
+--        end);
+--    end,
+--    --- @param self NQT_Misc_ChatCursor
+--    disable = function(self)
+--        for editBox, line in pairs(self.editBoxLines) do
+--            line:Hide();
+--            editBox:SetBlinkSpeed(line.editBoxBlinkSpeed);
+--        end
+--    end,
+--};--]]
 tweaks.nukeCombatLog = {
     order = increment(),
     defaultEnabled = false,
