@@ -4,8 +4,8 @@ local NQT = select(2, ...);
 local Main = NQT.Main;
 local L = NQT.L;
 
---- @class NQT_ProfessionButtonTab: NumyConfig_Module, AceEvent-3.0, AceHook-3.0
-local Module = Main:NewModule('ProfessionButtonTab', 'AceEvent-3.0', 'AceHook-3.0');
+--- @class NQT_ProfessionButtonTab: NumyConfig_Module, NumyAceEvent-3.0, AceHook-3.0
+local Module = Main:NewModule('ProfessionButtonTab', 'NumyAceEvent-3.0', 'AceHook-3.0');
 
 function Module:GetName()
     return L["Profession Button Tab"];
