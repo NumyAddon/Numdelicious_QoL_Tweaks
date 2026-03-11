@@ -21,6 +21,7 @@ function Module:OnInitialize()
     local combatFrame = self.CombatTextureFrame;
     do
         --- @param frame NQT_WishIcons_IconFrame
+        --- @param event FrameEvent
         local function onEvent(frame, event)
             frame:UpdateVisibility(event == "PLAYER_REGEN_DISABLED");
         end
@@ -49,7 +50,11 @@ function Module:OnInitialize()
     local repairFrame = self.RepairReminderFrame;
     do
         --- @param frame NQT_WishIcons_RepairIconFrame
-        local function onEvent(frame)
+        local function onEvent(frame, event)
+            if event == "PLAYER_REGEN_DISABLED" or InCombatLockdown() then
+                frame:UpdateVisibility(false);
+                return;
+            end
             if self.db.repairReminder.restingOnly and not IsResting() then
                 frame:UpdateVisibility(false);
                 return;
@@ -97,6 +102,8 @@ function Module:OnInitialize()
         repairFrame:RegisterEvent("PLAYER_DEAD");
         repairFrame:RegisterEvent("UPDATE_INVENTORY_DURABILITY");
         repairFrame:RegisterEvent("MERCHANT_CLOSED");
+        repairFrame:RegisterEvent("PLAYER_REGEN_ENABLED");
+        repairFrame:RegisterEvent("PLAYER_REGEN_DISABLED");
         if self.db.repairReminder.restingOnly then
             repairFrame:RegisterEvent("PLAYER_UPDATE_RESTING");
         end
@@ -117,6 +124,7 @@ function Module:OnDisable()
     for _, frame in pairs({ self.CombatTextureFrame, self.RepairReminderFrame }) do
         if frame.enabled then
             frame.onDisable(frame);
+            frame:Hide();
         end
     end
 end
@@ -417,7 +425,11 @@ do
     --- @param shouldShow boolean
     function iconMixin:UpdateVisibility(shouldShow)
         self.shouldShow = shouldShow;
-        if not self.enabled then return; end
+        if not self.enabled then
+            self:Hide();
+
+            return;
+        end
         if self.forceShown then
             self:Show();
         else
