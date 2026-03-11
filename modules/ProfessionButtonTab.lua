@@ -63,8 +63,8 @@ end
 
 function Module:OnEnable()
     QueryGuildRecipes();
-    self:RegisterEvent('TRADE_SKILL_DATA_SOURCE_CHANGED');
     EventUtil.ContinueOnAddOnLoaded('Blizzard_Professions', function()
+        self:RegisterEvent('TRADE_SKILL_DATA_SOURCE_CHANGED');
         if self:IsEnabled() and not self:IsHooked(ProfessionsFrame, 'OnShow') then
             self:SecureHookScript(ProfessionsFrame, 'OnShow', function()
                 if not InCombatLockdown() then
