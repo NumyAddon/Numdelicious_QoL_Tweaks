@@ -111,7 +111,7 @@ function Module:OnButtonClick(brokerFrame, button)
         end
     elseif button == 'RightButton' then
         if IsControlKeyDown() then
-            Settings.OpenToCategory('AngryAssign');
+            Settings.OpenToCategory(AngryAssign.categoryID);
         elseif IsShiftKeyDown() then
             AngryAssign_ToggleWindow();
         elseif currentPage then
@@ -200,7 +200,7 @@ end
 function Module:RunVersionCheck()
     local configRegistry = LibStub('AceConfigRegistry-3.0');
     if not configRegistry then return; end
-    local options = configRegistry:GetOptionsTable('AngryAssign', 'cmd', 'Numdelicious_QoL_Tweaks');
+    local options = configRegistry:GetOptionsTable('AngryAssign', 'cmd', 'Numdelicious_QoL_Tweaks-1.0');
     local versionCheck = options and options.args and options.args.version;
     if not versionCheck then return; end
     versionCheck.func();

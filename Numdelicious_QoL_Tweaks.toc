@@ -10,7 +10,7 @@
 ## X-Curse-Project-ID: 1392277
 ## X-Wago-ID: mNw74zNo
 ## IconTexture: Interface\Addons\Numdelicious_QoL_Tweaks\media\icon
-## OptionalDeps: AngryAssignments
+## OptionalDeps: AngryAssignments, !!!NumyConfig
 
 ## Category: Other
 ## Category-deDE: Anderes
