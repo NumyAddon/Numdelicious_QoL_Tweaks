@@ -24,7 +24,7 @@
 ## Category-zhCN: 其它
 ## Category-zhTW: 其他
 
-libs/embeds.xml
+libs\embeds.xml
 locale\locale.xml
 
 core.lua
