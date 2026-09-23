@@ -5,6 +5,8 @@
 ## Title: Numdelicious QoL Tweaks
 ## Notes: Random QoL tweaks and fixes
 ## Author: Numy
+## X-GameType: [Game]
+## X-GameFamily: [Family]
 ## Version: @project-version@
 ## SavedVariables: NumyQT_DB
 ## X-Curse-Project-ID: 1392277
